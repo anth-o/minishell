@@ -1,31 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signals.c                                          :+:      :+:    :+:   */
+/*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: antho <antho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/13 12:37:15 by antho             #+#    #+#             */
-/*   Updated: 2026/02/15 22:28:13 by antho            ###   ########.fr       */
+/*   Created: 2025/04/07 19:21:03 by antho             #+#    #+#             */
+/*   Updated: 2025/04/12 12:28:46 by antho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "libft.h"
 
-int		g_signal = 0;
-
-void	handle_sigint(int sig)
+char	*ft_strjoin(const char *s1, const char *s2)
 {
-	(void)sig;
-	g_signal = SIGINT;
-	write(1, "\n", 1);
-	rl_on_new_line();
-	rl_replace_line("", 0);
-	rl_redisplay();
-}
+	size_t	len_s1;
+	size_t	len_s2;
+	char	*result;
 
-void	handle_signals(void)
-{
-	signal(SIGINT, handle_sigint);
-	signal(SIGQUIT, SIG_IGN);
+	if (!s1 || !s2)
+		return (NULL);
+	len_s1 = ft_strlen(s1);
+	len_s2 = ft_strlen(s2);
+	result = malloc(len_s1 + len_s2 + 1);
+	if (!result)
+		return (NULL);
+	result[0] = '\0';
+	ft_strlcat(result, s1, len_s1 + len_s2 + 1);
+	ft_strlcat(result, s2, len_s1 + len_s2 + 1);
+	return (result);
 }

@@ -1,31 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signals.c                                          :+:      :+:    :+:   */
+/*   ft_pwd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: antho <antho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/13 12:37:15 by antho             #+#    #+#             */
-/*   Updated: 2026/02/15 22:28:13 by antho            ###   ########.fr       */
+/*   Created: 2026/02/15 00:57:53 by antho             #+#    #+#             */
+/*   Updated: 2026/02/15 01:03:24 by antho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
-int		g_signal = 0;
-
-void	handle_sigint(int sig)
+int	ft_pwd(void)
 {
-	(void)sig;
-	g_signal = SIGINT;
-	write(1, "\n", 1);
-	rl_on_new_line();
-	rl_replace_line("", 0);
-	rl_redisplay();
-}
+	char	cwd[1024];
 
-void	handle_signals(void)
-{
-	signal(SIGINT, handle_sigint);
-	signal(SIGQUIT, SIG_IGN);
+	if (getcwd(cwd, sizeof(cwd)))
+	{
+		printf("%s\n", cwd);
+		return (0);
+	}
+	perror("pwd");
+	return (1);
 }

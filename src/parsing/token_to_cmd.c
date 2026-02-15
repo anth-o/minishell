@@ -6,7 +6,7 @@
 /*   By: antho <antho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/11 20:36:12 by antho             #+#    #+#             */
-/*   Updated: 2025/11/19 11:25:27 by antho            ###   ########.fr       */
+/*   Updated: 2026/02/15 22:28:08 by antho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,14 +33,14 @@ static int	is_quote_closed(const char *str, int i)
 	char	q;
 
 	q = str[i];
-	i++; // passer l'ouverture
+	i++;
 	while (str[i])
 	{
 		if (str[i] == q)
-			return (1); // fermée
+			return (1);
 		i++;
 	}
-	return (0); // non fermée
+	return (0);
 }
 
 char	*remove_quotes(const char *str)
@@ -124,14 +124,29 @@ int	assign_redir(t_cmd *curr, t_token **tok)
 			|| t->type == HEREDOC) && t->next)
 	{
 		if (t->type == REDIR_IN)
+		{
+			if (curr->infile)
+				free(curr->infile);
 			curr->infile = strdup(t->next->value);
-		else if (t->type == REDIR_OUT)
+		}
+		else if (t->type == REDIR_OUT || t->type == REDIR_APPEND)
+		{
+			if (curr->outfile)
+				free(curr->outfile);
 			curr->outfile = strdup(t->next->value);
-		else if (t->type == REDIR_APPEND)
-			curr->outfile = strdup(t->next->value), curr->append = 1;
+			if (t->type == REDIR_APPEND)
+				curr->append = 1;
+			else
+				curr->append = 0;
+		}
 		else if (t->type == HEREDOC)
-			curr->infile = strdup(t->next->value), curr->heredoc = 1;
-		*tok = t->next; // skip filename
+		{
+			if (curr->infile)
+				free(curr->infile);
+			curr->infile = strdup(t->next->value);
+			curr->heredoc = 1;
+		}
+		*tok = t->next;
 		return (1);
 	}
 	return (0);
@@ -150,6 +165,24 @@ int	is_redir(t_token *t)
 {
 	return (t->type == REDIR_IN || t->type == REDIR_OUT
 		|| t->type == REDIR_APPEND || t->type == HEREDOC);
+}
+
+void	free_cmds(t_cmd *cmds)
+{
+	t_cmd	*tmp;
+
+	while (cmds)
+	{
+		tmp = cmds->next;
+		if (cmds->args)
+			free_tab(cmds->args);
+		if (cmds->infile)
+			free(cmds->infile);
+		if (cmds->outfile)
+			free(cmds->outfile);
+		free(cmds);
+		cmds = tmp;
+	}
 }
 
 t_cmd	*token_to_cmd(t_token *tok)

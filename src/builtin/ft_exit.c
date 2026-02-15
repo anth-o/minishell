@@ -1,31 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signals.c                                          :+:      :+:    :+:   */
+/*   ft_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: antho <antho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/13 12:37:15 by antho             #+#    #+#             */
-/*   Updated: 2026/02/15 22:28:13 by antho            ###   ########.fr       */
+/*   Created: 2026/02/15 01:16:57 by antho             #+#    #+#             */
+/*   Updated: 2026/02/15 18:58:44 by antho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
-int		g_signal = 0;
-
-void	handle_sigint(int sig)
+void	free_shell(t_shell *shell)
 {
-	(void)sig;
-	g_signal = SIGINT;
-	write(1, "\n", 1);
-	rl_on_new_line();
-	rl_replace_line("", 0);
-	rl_redisplay();
+	if (shell->env)
+		free_env(shell->env);
+	rl_clear_history();
 }
 
-void	handle_signals(void)
+int	ft_exit(t_shell *shell, t_cmd *cmd)
 {
-	signal(SIGINT, handle_sigint);
-	signal(SIGQUIT, SIG_IGN);
+	printf("exit\n");
+	free_shell(shell);
+	if (cmd)
+		free_cmds(cmd);
+	exit(0);
+	return (0);
 }

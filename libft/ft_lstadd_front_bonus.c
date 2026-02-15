@@ -1,31 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signals.c                                          :+:      :+:    :+:   */
+/*   ft_lstadd_front_bonus.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: antho <antho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/13 12:37:15 by antho             #+#    #+#             */
-/*   Updated: 2026/02/15 22:28:13 by antho            ###   ########.fr       */
+/*   Created: 2025/04/12 12:29:29 by antho             #+#    #+#             */
+/*   Updated: 2025/04/13 18:04:48 by antho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "libft.h"
 
-int		g_signal = 0;
-
-void	handle_sigint(int sig)
+void	ft_lstadd_front(t_list **lst, t_list *new)
 {
-	(void)sig;
-	g_signal = SIGINT;
-	write(1, "\n", 1);
-	rl_on_new_line();
-	rl_replace_line("", 0);
-	rl_redisplay();
-}
-
-void	handle_signals(void)
-{
-	signal(SIGINT, handle_sigint);
-	signal(SIGQUIT, SIG_IGN);
+	if (lst && new)
+	{
+		new->next = *lst;
+		*lst = new;
+	}
 }

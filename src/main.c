@@ -6,7 +6,7 @@
 /*   By: antho <antho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/13 11:59:29 by antho             #+#    #+#             */
-/*   Updated: 2025/11/24 11:50:59 by antho            ###   ########.fr       */
+/*   Updated: 2026/02/15 22:28:10 by antho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,31 +22,6 @@ void	free_tokens(t_token *head)
 		free(head->value);
 		free(head);
 		head = tmp;
-	}
-}
-
-void	free_cmds(t_cmd *cmds)
-{
-	t_cmd	*tmp;
-	int		i;
-
-	while (cmds)
-	{
-		tmp = cmds->next;
-		if (cmds->args)
-		{
-			i = 0;
-			while (cmds->args[i])
-			{
-				free(cmds->args[i]);
-				i++;
-			}
-			free(cmds->args);
-		}
-		free(cmds->infile);
-		free(cmds->outfile);
-		free(cmds);
-		cmds = tmp;
 	}
 }
 
@@ -97,13 +72,21 @@ int	main(int argc, char **argv, char **envp)
 	char	*input;
 	t_token	*tokens;
 	t_cmd	*cmds;
+	t_shell	shell;
 
 	(void)argc;
 	(void)argv;
+	shell.exit_code = 0;
+	shell.env = init_env(envp);
+	if (!shell.env && *envp)
+		return (1);
 	handle_signals();
 	while (1)
 	{
+		g_signal = 0;
 		input = readline("road_to_BH> ");
+		if (g_signal == SIGINT)
+			shell.exit_code = 130;
 		if (!input)
 		{
 			printf("exit\n");
@@ -114,14 +97,36 @@ int	main(int argc, char **argv, char **envp)
 		tokens = argv_to_token(input);
 		if (tokens)
 		{
-			expand_vars_tokens(tokens, envp);
+			if (check_syntax(tokens))
+			{
+				shell.exit_code = 2;
+				free_tokens(tokens);
+				free(input);
+				continue ;
+			}
+			expand_vars_tokens(tokens, shell.env, shell.exit_code);
 			remove_quotes_tokens(tokens);
 			cmds = token_to_cmd(tokens);
 			print_cmds(cmds);
+			if (cmds)
+				exec_simple_cmd(cmds, &shell);
 			free_cmds(cmds);
 			free_tokens(tokens);
 		}
 		free(input);
 	}
-	return (0);
+	free_env(shell.env);
+	rl_clear_history();
+	return (shell.exit_code);
 }
+
+/*
+BUILTIN
+echo - export - unset
+
+HEREDOC <<
+
+SIGNAUX SPECIFIQUES
+
+PIPES |
+*/

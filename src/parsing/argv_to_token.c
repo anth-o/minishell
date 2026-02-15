@@ -6,7 +6,7 @@
 /*   By: antho <antho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 15:12:16 by antho             #+#    #+#             */
-/*   Updated: 2025/11/17 13:22:11 by antho            ###   ########.fr       */
+/*   Updated: 2026/02/14 17:15:25 by antho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,11 @@ static int	skip_quotes(char *line, int i)
 	char	quote;
 
 	quote = line[i];
-	i++; // skip opening quote
+	i++;
 	while (line[i] && line[i] != quote)
 		i++;
 	if (line[i] == quote)
-		i++; // skip closing quote
+		i++;
 	return (i);
 }
 

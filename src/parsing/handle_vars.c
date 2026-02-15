@@ -6,13 +6,11 @@
 /*   By: antho <antho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 17:57:56 by antho             #+#    #+#             */
-/*   Updated: 2025/11/24 12:59:42 by antho            ###   ########.fr       */
+/*   Updated: 2026/02/15 18:35:53 by antho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-int			g_last_exit = 0;
 
 static int	get_len(int n)
 {
@@ -69,22 +67,7 @@ int	var_name_len(const char *s)
 	return (i);
 }
 
-char	*get_env_value(const char *name, char **envp)
-{
-	int	i;
-	int	len;
-
-	i = 0;
-	len = strlen(name);
-	while (envp[i])
-	{
-		if (!strncmp(envp[i], name, len) && envp[i][len] == '=')
-			return (envp[i] + len + 1);
-		i++;
-	}
-	return ("");
-}
-
+// Fonctions append_char et append_str inchangées...
 char	*append_char(char *str, char c)
 {
 	char	*new;
@@ -135,40 +118,52 @@ char	*append_str(char *dest, char *src)
 	return (new);
 }
 
-char	*expand_var(const char *var_start, char **envp, int *consumed_len)
+// MODIFICATION 2: Ajout du paramètre exit_code et t_env
+char	*expand_var(const char *var_start, t_env *env, int *consumed_len,
+		int exit_code)
 {
 	int		len;
 	char	*name;
 	char	*value;
 	char	*expanded;
 
+	// Gestion du $?
 	if (var_start[0] == '?')
 	{
 		*consumed_len = 1;
-		return (ft_itoa(g_last_exit));
+		return (ft_itoa(exit_code));
 	}
 	len = var_name_len(var_start);
 	name = strndup(var_start, len);
-	value = get_env_value(name, envp);
-	expanded = strdup(value);
+	// CORRECTION ICI :
+	// 1. On inverse les arguments : (env, name) au lieu de (name, env)
+	value = get_env_value(env, name);
+	// 2. On gère le cas NULL (si la variable n'existe pas, on renvoie vide)
+	if (value)
+		expanded = strdup(value);
+	else
+		expanded = strdup(""); // Important pour echo $INEXISTANT
 	free(name);
 	*consumed_len = len;
 	return (expanded);
 }
 
-static void	process_expansion(char **res, const char *input, int *i, char **env)
+// MODIFICATION 3: Propagation des paramètres
+static void	process_expansion(char **res, const char *input, int *i, t_env *env,
+		int exit_code)
 {
 	int		consumed;
 	char	*exp;
 
 	(*i)++;
-	exp = expand_var(input + *i, env, &consumed);
+	exp = expand_var(input + *i, env, &consumed, exit_code);
 	*res = append_str(*res, exp);
 	free(exp);
 	*i += consumed;
 }
 
-char	*expand_variables(const char *input, char **envp)
+// MODIFICATION 4: Propagation des paramètres
+char	*expand_variables(const char *input, t_env *env, int exit_code)
 {
 	int		i;
 	int		sq;
@@ -195,14 +190,16 @@ char	*expand_variables(const char *input, char **envp)
 		}
 		else if (input[i] == '$' && !sq && !(input[i + 1] == '\0' || input[i
 				+ 1] == ' ' || (input[i + 1] == '"' && !dq)))
-			process_expansion(&res, input, &i, envp);
+			// On passe env et exit_code
+			process_expansion(&res, input, &i, env, exit_code);
 		else
 			res = append_char(res, input[i++]);
 	}
 	return (res);
 }
 
-void	expand_vars_tokens(t_token *head, char **envp)
+// MODIFICATION 5: Fonction principale appelée par le main
+void	expand_vars_tokens(t_token *head, t_env *env, int exit_code)
 {
 	t_token	*tmp;
 	char	*new_val;
@@ -212,7 +209,7 @@ void	expand_vars_tokens(t_token *head, char **envp)
 	{
 		if (tmp->type == WORD)
 		{
-			new_val = expand_variables(tmp->value, envp);
+			new_val = expand_variables(tmp->value, env, exit_code);
 			free(tmp->value);
 			tmp->value = new_val;
 		}
