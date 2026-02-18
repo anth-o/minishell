@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antho <antho@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ko-mahon <ko-mahon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/15 18:27:05 by antho             #+#    #+#             */
-/*   Updated: 2026/02/15 22:32:17 by antho            ###   ########.fr       */
+/*   Updated: 2026/02/18 17:54:16 by ko-mahon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,12 +36,18 @@ int	is_builtin(char *cmd)
 int	exec_builtin(t_cmd *cmd, t_shell *shell)
 {
 	// echo, export et unset
+	if (ft_strcmp(cmd->args[0], "echo") == 0)
+		return (ft_echo(cmd));
 	if (ft_strcmp(cmd->args[0], "pwd") == 0)
 		return (ft_pwd());
 	if (ft_strcmp(cmd->args[0], "env") == 0)
 		return (ft_env(shell->env));
 	if (ft_strcmp(cmd->args[0], "cd") == 0)
 		return (ft_cd(shell, cmd));
+	if (ft_strcmp(cmd->args[0], "export") == 0)
+		return (ft_export(shell, cmd));
+	if (ft_strcmp(cmd->args[0], "unset") == 0)
+		return (ft_unset(shell, cmd));
 	if (ft_strcmp(cmd->args[0], "exit") == 0)
 		return (ft_exit(shell, cmd));
 	return (0);

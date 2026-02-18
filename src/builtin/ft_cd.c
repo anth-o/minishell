@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antho <antho@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ko-mahon <ko-mahon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/15 11:49:37 by antho             #+#    #+#             */
-/*   Updated: 2026/02/15 18:44:21 by antho            ###   ########.fr       */
+/*   Updated: 2026/02/18 20:12:09 by ko-mahon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,11 @@ int	ft_cd(t_shell *shell, t_cmd *cmd)
 
 	if (!getcwd(current_dir, sizeof(current_dir)))
 		return (1);
+	if (cmd->args && cmd->args[1] && cmd->args[2])
+	{
+		ft_putstr_fd("minishell: cd: too many arguments\n", 2);
+		return (1);
+	}
 	if (!cmd->args[1])
 	{
 		path = get_env_value(shell->env, "HOME");

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_to_cmd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antho <antho@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ko-mahon <ko-mahon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/11 20:36:12 by antho             #+#    #+#             */
-/*   Updated: 2026/02/15 22:28:08 by antho            ###   ########.fr       */
+/*   Updated: 2026/02/18 20:12:10 by ko-mahon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,13 +131,11 @@ int	assign_redir(t_cmd *curr, t_token **tok)
 		}
 		else if (t->type == REDIR_OUT || t->type == REDIR_APPEND)
 		{
+			/* single outfile behavior: keep last redirection seen */
 			if (curr->outfile)
 				free(curr->outfile);
 			curr->outfile = strdup(t->next->value);
-			if (t->type == REDIR_APPEND)
-				curr->append = 1;
-			else
-				curr->append = 0;
+			curr->append = (t->type == REDIR_APPEND) ? 1 : 0;
 		}
 		else if (t->type == HEREDOC)
 		{

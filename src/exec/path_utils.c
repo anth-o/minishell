@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   path_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antho <antho@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ko-mahon <ko-mahon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/14 18:58:44 by antho             #+#    #+#             */
-/*   Updated: 2026/02/14 19:35:00 by antho            ###   ########.fr       */
+/*   Updated: 2026/02/18 20:12:10 by ko-mahon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,9 @@ char	*find_path(char *cmd, t_env *env)
 	// 1. Si la commande contient déjà un slash (ex: /bin/ls ou ./minishell)
 	if (cmd && strchr(cmd, '/'))
 	{
-		if (access(cmd, X_OK) == 0)
+		/* If the path contains a slash, return it if the file exists
+		 * even if not executable: execve will set errno and we can map it. */
+		if (access(cmd, F_OK) == 0)
 			return (strdup(cmd));
 		return (NULL);
 	}

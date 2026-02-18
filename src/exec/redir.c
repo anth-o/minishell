@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antho <antho@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ko-mahon <ko-mahon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/14 21:05:40 by antho             #+#    #+#             */
-/*   Updated: 2026/02/14 21:26:59 by antho            ###   ########.fr       */
+/*   Updated: 2026/02/18 20:12:10 by ko-mahon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,8 @@ static int	check_infile(t_cmd *cmd)
 // Gère la sortie (> et >>)
 static int	check_outfile(t_cmd *cmd)
 {
-	int	fd;
-	int	flags;
+	int fd;
+	int flags;
 
 	if (!cmd->outfile)
 		return (0);
@@ -47,7 +47,6 @@ static int	check_outfile(t_cmd *cmd)
 		flags = O_WRONLY | O_CREAT | O_APPEND;
 	else
 		flags = O_WRONLY | O_CREAT | O_TRUNC;
-	// 0644 = Droits classiques (Lecture/Ecriture pour toi,
 	fd = open(cmd->outfile, flags, 0644);
 	if (fd < 0)
 	{

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_vars.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antho <antho@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ko-mahon <ko-mahon@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/18 17:57:56 by antho             #+#    #+#             */
-/*   Updated: 2026/02/15 18:35:53 by antho            ###   ########.fr       */
+/*   Updated: 2026/02/18 20:12:08 by ko-mahon         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ char	*append_char(char *str, char c)
 		return (NULL);
 	if (str)
 	{
-		strlcat(new, str, len + 2);
+		ft_strlcat(new, str, len + 2);
 		free(str);
 	}
 	new[len] = c;
@@ -110,11 +110,11 @@ char	*append_str(char *dest, char *src)
 		return (NULL);
 	if (dest)
 	{
-		strlcat(new, dest, total_len);
+		ft_strlcat(new, dest, total_len);
 		free(dest);
 	}
 	if (src)
-		strlcat(new, src, total_len);
+		ft_strlcat(new, src, total_len);
 	return (new);
 }
 
@@ -190,8 +190,15 @@ char	*expand_variables(const char *input, t_env *env, int exit_code)
 		}
 		else if (input[i] == '$' && !sq && !(input[i + 1] == '\0' || input[i
 				+ 1] == ' ' || (input[i + 1] == '"' && !dq)))
-			// On passe env et exit_code
-			process_expansion(&res, input, &i, env, exit_code);
+		{
+			/* Only expand if there's a valid variable name after $ */
+			int vlen = var_name_len(input + i + 1);
+			if (vlen > 0 || input[i + 1] == '?')
+				process_expansion(&res, input, &i, env, exit_code);
+			else
+				/* treat lone $ as literal */
+				res = append_char(res, input[i++]);
+		}
 		else
 			res = append_char(res, input[i++]);
 	}
