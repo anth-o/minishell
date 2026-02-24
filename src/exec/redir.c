@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redir.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ko-mahon <ko-mahon@student.42.fr>          +#+  +:+       +#+        */
+/*   By: antho <antho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/14 21:05:40 by antho             #+#    #+#             */
-/*   Updated: 2026/02/18 20:12:10 by ko-mahon         ###   ########.fr       */
+/*   Updated: 2026/02/23 22:52:03 by antho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,11 @@ static int	check_infile(t_cmd *cmd)
 {
 	int	fd;
 
-	if (!cmd->infile || cmd->heredoc) // On ignore heredoc pour l'instant
+	if (!cmd->infile)
 		return (0);
 	fd = open(cmd->infile, O_RDONLY);
 	if (fd < 0)
 	{
-		// Affiche : "minishell: nom_fichier: No such file or directory"
 		perror(cmd->infile);
 		return (1);
 	}
@@ -35,11 +34,10 @@ static int	check_infile(t_cmd *cmd)
 	return (0);
 }
 
-// Gère la sortie (> et >>)
 static int	check_outfile(t_cmd *cmd)
 {
-	int fd;
-	int flags;
+	int	fd;
+	int	flags;
 
 	if (!cmd->outfile)
 		return (0);
@@ -62,7 +60,6 @@ static int	check_outfile(t_cmd *cmd)
 	return (0);
 }
 
-// Fonction principale
 int	handle_redirections(t_cmd *cmd)
 {
 	if (check_infile(cmd))

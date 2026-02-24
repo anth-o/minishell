@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ko-mahon <ko-mahon@student.42.fr>          +#+  +:+       +#+        */
+/*   By: antho <antho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/15 18:27:05 by antho             #+#    #+#             */
-/*   Updated: 2026/02/18 17:54:16 by ko-mahon         ###   ########.fr       */
+/*   Updated: 2026/02/23 23:03:11 by antho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int	exec_builtin(t_cmd *cmd, t_shell *shell)
 	if (ft_strcmp(cmd->args[0], "echo") == 0)
 		return (ft_echo(cmd));
 	if (ft_strcmp(cmd->args[0], "pwd") == 0)
-		return (ft_pwd());
+		return (ft_pwd(shell));
 	if (ft_strcmp(cmd->args[0], "env") == 0)
 		return (ft_env(shell->env));
 	if (ft_strcmp(cmd->args[0], "cd") == 0)

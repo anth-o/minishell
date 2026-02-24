@@ -6,72 +6,32 @@
 /*   By: antho <antho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 15:12:16 by antho             #+#    #+#             */
-/*   Updated: 2026/02/14 17:15:25 by antho            ###   ########.fr       */
+/*   Updated: 2026/02/23 22:26:51 by antho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static t_token	*new_token(char *start, int len, t_tokentype type)
-{
-	t_token	*t;
-
-	t = malloc(sizeof(t_token));
-	if (!t)
-		return (NULL);
-	t->value = strndup(start, len);
-	t->type = type;
-	t->next = NULL;
-	return (t);
-}
-
-static void	add_token(t_token **head, t_token **last, t_token *new)
-{
-	if (!*head)
-		*head = new;
-	else
-		(*last)->next = new;
-	*last = new;
-}
-
-static int	skip_quotes(char *line, int i)
-{
-	char	quote;
-
-	quote = line[i];
-	i++;
-	while (line[i] && line[i] != quote)
-		i++;
-	if (line[i] == quote)
-		i++;
-	return (i);
-}
-
-static void	skip_spaces(char *line, int *i)
-{
-	while (line[*i] && (line[*i] == ' ' || line[*i] == '\t'))
-		(*i)++;
-}
-
 static int	handle_operator(char *line, int *i, t_token **h, t_token **l)
 {
 	if (line[*i] == '|')
-		return (add_token(h, l, new_token(line + (*i)++, 1, PIPE)), 1);
-	if (line[*i] == '<')
-	{
-		if (line[*i + 1] == '<')
-			return (add_token(h, l, new_token(line + *i, 2, HEREDOC)), *i += 2,
-				1);
-		return (add_token(h, l, new_token(line + (*i)++, 1, REDIR_IN)), 1);
-	}
-	if (line[*i] == '>')
-	{
-		if (line[*i + 1] == '>')
-			return (add_token(h, l, new_token(line + *i, 2, REDIR_APPEND)), *i
-				+= 2, 1);
-		return (add_token(h, l, new_token(line + (*i)++, 1, REDIR_OUT)), 1);
-	}
-	return (0);
+		add_token(h, l, new_token(line + *i, 1, PIPE));
+	else if (line[*i] == '<' && line[*i + 1] == '<')
+		add_token(h, l, new_token(line + *i, 2, HEREDOC));
+	else if (line[*i] == '<')
+		add_token(h, l, new_token(line + *i, 1, REDIR_IN));
+	else if (line[*i] == '>' && line[*i + 1] == '>')
+		add_token(h, l, new_token(line + *i, 2, REDIR_APPEND));
+	else if (line[*i] == '>')
+		add_token(h, l, new_token(line + *i, 1, REDIR_OUT));
+	else
+		return (0);
+	if ((line[*i] == '<' && line[*i + 1] == '<') || (line[*i] == '>' && line[*i
+			+ 1] == '>'))
+		*i += 2;
+	else
+		(*i)++;
+	return (1);
 }
 
 static void	handle_word(char *line, int *i, t_token **h, t_token **l)
@@ -79,8 +39,7 @@ static void	handle_word(char *line, int *i, t_token **h, t_token **l)
 	int	start;
 
 	start = *i;
-	while (line[*i] && line[*i] != ' ' && line[*i] != '\t' && line[*i] != '|'
-		&& line[*i] != '<' && line[*i] != '>')
+	while (line[*i] && !is_delimiter(line[*i]))
 	{
 		if (line[*i] == '\'' || line[*i] == '"')
 			*i = skip_quotes(line, *i);

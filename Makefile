@@ -17,6 +17,7 @@ SRC = src/main.c \
 	src/parsing/handle_vars.c \
 	src/parsing/check_syntax.c \
 	src/parsing/env_utils.c \
+	src/parsing/env_utils2.c \
 	src/exec/path_utils.c \
 	src/exec/exec_simple.c \
 	src/exec/redir.c \
@@ -27,7 +28,14 @@ SRC = src/main.c \
 	src/builtin/ft_pwd.c \
 	src/builtin/ft_echo.c \
 	src/builtin/ft_export.c \
-	src/builtin/ft_unset.c
+	src/builtin/ft_unset.c \
+	src/builtin/ft_export_utils.c \
+	src/exec/exec_utils.c \
+	src/parsing/token_utils.c \
+	src/parsing/handle_vars_utils.c \
+	src/parsing/cmd_utils.c \
+	src/exec/heredoc.c \
+	src/parsing/quotes_utils.c 
 
 OBJ = $(SRC:.c=.o)
 
