@@ -6,7 +6,7 @@
 /*   By: antho <antho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/15 18:27:05 by antho             #+#    #+#             */
-/*   Updated: 2026/02/23 23:03:11 by antho            ###   ########.fr       */
+/*   Updated: 2026/02/24 21:26:26 by antho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,8 @@ int	is_builtin(char *cmd)
 
 int	exec_builtin(t_cmd *cmd, t_shell *shell)
 {
-	// echo, export et unset
+	if (!cmd->args || !cmd->args[0])
+		return (0);
 	if (ft_strcmp(cmd->args[0], "echo") == 0)
 		return (ft_echo(cmd));
 	if (ft_strcmp(cmd->args[0], "pwd") == 0)

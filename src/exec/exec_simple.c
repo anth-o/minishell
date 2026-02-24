@@ -6,7 +6,7 @@
 /*   By: antho <antho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/02/14 19:20:58 by antho             #+#    #+#             */
-/*   Updated: 2026/02/23 22:14:59 by antho            ###   ########.fr       */
+/*   Updated: 2026/02/24 21:25:35 by antho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,8 @@ static void	run_child(t_cmd *cur, t_shell *sh, int *data, int **pipes)
 	setup_child_pipes(data[0], data[1], pipes);
 	if (handle_redirections(cur))
 		exit(1);
+	if (!cur->args || !cur->args[0])
+		exit(0);
 	if (is_builtin(cur->args[0]))
 		exit(exec_builtin(cur, sh));
 	handle_cmd_execution(cur, sh);
@@ -107,7 +109,7 @@ void	exec_simple_cmd(t_cmd *cmd, t_shell *shell)
 	if (!cmd)
 		return ;
 	count = count_cmds(cmd);
-	if (count == 1 && is_builtin(cmd->args[0]))
+	if (count == 1 && cmd->args && cmd->args[0] && is_builtin(cmd->args[0]))
 		exec_single_builtin(cmd, shell);
 	else
 		exec_multiple_cmds(cmd, shell, count);

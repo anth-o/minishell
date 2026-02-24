@@ -6,7 +6,7 @@
 /*   By: antho <antho@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/11 20:36:12 by antho             #+#    #+#             */
-/*   Updated: 2026/02/24 00:50:37 by antho            ###   ########.fr       */
+/*   Updated: 2026/02/24 21:33:56 by antho            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ static void	set_infile(t_cmd *cur, t_token *t)
 int	assign_redir(t_cmd *cur, t_token **tok)
 {
 	t_token	*t;
+	int		fd;
 
 	t = *tok;
 	if (!is_redir(t) || !t->next)
@@ -49,6 +50,14 @@ int	assign_redir(t_cmd *cur, t_token **tok)
 		set_infile(cur, t);
 	else
 	{
+		/* --- NOUVEAUTÉ : On crée le fichier physiquement --- */
+		if (t->type == REDIR_OUT)
+			fd = open(t->next->value, O_CREAT | O_WRONLY | O_TRUNC, 0644);
+		else
+			fd = open(t->next->value, O_CREAT | O_WRONLY | O_APPEND, 0644);
+		if (fd >= 0)
+			close(fd);
+		/* --------------------------------------------------- */
 		if (cur->outfile)
 			free(cur->outfile);
 		cur->outfile = ft_strdup(t->next->value);
