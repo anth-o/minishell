@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_pwd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antho <antho@student.42.fr>                +#+  +:+       +#+        */
+/*   By: adumaine <adumaine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/02/15 00:57:53 by antho             #+#    #+#             */
-/*   Updated: 2026/02/23 23:02:28 by antho            ###   ########.fr       */
+/*   Created: 2026/02/15 00:57:53 by adumaine          #+#    #+#             */
+/*   Updated: 2026/02/25 18:26:52 by adumaine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ int	ft_pwd(t_shell *shell)
 		printf("%s\n", cwd);
 		return (0);
 	}
-	// Si getcwd échoue (dossier supprimé), on triche avec l'env !
 	env_pwd = get_env_value(shell->env, "PWD");
 	if (env_pwd)
 	{

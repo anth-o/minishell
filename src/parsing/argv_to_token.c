@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   argv_to_token.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antho <antho@student.42.fr>                +#+  +:+       +#+        */
+/*   By: adumaine <adumaine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/15 15:12:16 by antho             #+#    #+#             */
-/*   Updated: 2026/02/23 22:26:51 by antho            ###   ########.fr       */
+/*   Created: 2025/10/15 15:12:16 by adumaine          #+#    #+#             */
+/*   Updated: 2026/02/25 18:26:07 by adumaine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static int	handle_operator(char *line, int *i, t_token **h, t_token **l)
 	else
 		return (0);
 	if ((line[*i] == '<' && line[*i + 1] == '<') || (line[*i] == '>' && line[*i
-			+ 1] == '>'))
+				+ 1] == '>'))
 		*i += 2;
 	else
 		(*i)++;

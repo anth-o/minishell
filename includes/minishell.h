@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antho <antho@student.42.fr>                +#+  +:+       +#+        */
+/*   By: adumaine <adumaine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/13 12:01:39 by antho             #+#    #+#             */
-/*   Updated: 2026/02/24 00:57:09 by antho            ###   ########.fr       */
+/*   Created: 2025/10/13 12:01:39 by adumaine          #+#    #+#             */
+/*   Updated: 2026/02/25 18:27:52 by adumaine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,7 @@ void				add_arg(t_cmd *cmd, char *value);
 void				free_cmds(t_cmd *cmds);
 int					is_redir(t_token *t);
 int					check_syntax(t_token *tokens);
+int					check_unclosed_quote(char *str);
 void				free_tokens(t_token *head);
 
 /* Execution Core */

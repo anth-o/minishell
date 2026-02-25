@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antho <antho@student.42.fr>                +#+  +:+       +#+        */
+/*   By: adumaine <adumaine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/02/23 22:49:13 by antho             #+#    #+#             */
-/*   Updated: 2026/02/24 22:41:19 by antho            ###   ########.fr       */
+/*   Created: 2026/02/23 22:49:13 by adumaine          #+#    #+#             */
+/*   Updated: 2026/02/25 18:26:29 by adumaine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,6 @@
 static void	heredoc_sigint(int sig)
 {
 	(void)sig;
-	/* Le terminal affiche déjà le ^C,
-		donc on a juste besoin de sauter la ligne ! */
 	ft_putstr_fd("\n", 1);
 	exit(130);
 }
@@ -25,7 +23,6 @@ static void	read_heredoc(int fd, char *limiter)
 {
 	char	*line;
 
-	/* 2. On branche notre handler custom */
 	signal(SIGINT, heredoc_sigint);
 	signal(SIGQUIT, SIG_IGN);
 	while (1)
@@ -65,9 +62,7 @@ char	*ft_heredoc(char *limiter)
 	signal(SIGQUIT, SIG_IGN);
 	waitpid(pid, &status, 0);
 	signal(SIGINT, handle_sigint);
-	/* 3. On détecte que l'enfant a quitté via notre handler (code 130) */
 	if (WIFEXITED(status) && WEXITSTATUS(status) == 130)
 		g_signal = SIGINT;
-	/* On a enlevé le printf("\n") d'avant, car l'enfant l'a déjà fait ! */
 	return (tmp);
 }

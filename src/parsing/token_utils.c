@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antho <antho@student.42.fr>                +#+  +:+       +#+        */
+/*   By: adumaine <adumaine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/02/23 22:26:03 by antho             #+#    #+#             */
-/*   Updated: 2026/02/24 00:50:29 by antho            ###   ########.fr       */
+/*   Created: 2026/02/23 22:26:03 by adumaine          #+#    #+#             */
+/*   Updated: 2026/02/25 18:25:01 by adumaine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ t_token	*new_token(char *start, int len, t_tokentype type)
 	t = malloc(sizeof(t_token));
 	if (!t)
 		return (NULL);
-	// On utilise ft_substr au lieu du strndup interdit !
 	t->value = ft_substr(start, 0, len);
 	t->type = type;
 	t->next = NULL;

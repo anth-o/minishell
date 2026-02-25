@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_syntax.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antho <antho@student.42.fr>                +#+  +:+       +#+        */
+/*   By: adumaine <adumaine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/02/13 22:32:14 by antho             #+#    #+#             */
-/*   Updated: 2026/02/14 13:22:22 by antho            ###   ########.fr       */
+/*   Created: 2026/02/13 22:32:14 by adumaine          #+#    #+#             */
+/*   Updated: 2026/02/25 18:26:03 by adumaine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,4 +42,29 @@ int	check_syntax(t_token *tokens)
 		tokens = tokens->next;
 	}
 	return (0);
+}
+
+int	check_unclosed_quote(char *str)
+{
+	int		i;
+	int		in_quote;
+	char	q;
+
+	i = -1;
+	in_quote = 0;
+	q = '\0';
+	while (str[++i])
+	{
+		if (!in_quote && (str[i] == '\'' || str[i] == '"'))
+		{
+			in_quote = 1;
+			q = str[i];
+		}
+		else if (in_quote && str[i] == q)
+		{
+			in_quote = 0;
+			q = '\0';
+		}
+	}
+	return (in_quote);
 }

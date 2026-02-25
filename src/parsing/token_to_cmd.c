@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   token_to_cmd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antho <antho@student.42.fr>                +#+  +:+       +#+        */
+/*   By: adumaine <adumaine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/11 20:36:12 by antho             #+#    #+#             */
-/*   Updated: 2026/02/24 21:33:56 by antho            ###   ########.fr       */
+/*   Created: 2025/11/11 20:36:12 by adumaine          #+#    #+#             */
+/*   Updated: 2026/02/25 18:24:44 by adumaine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ static void	set_infile(t_cmd *cur, t_token *t)
 		free(cur->infile);
 	if (t->type == HEREDOC)
 	{
-		cur->infile = ft_heredoc(t->next->value); // 🚀 Connexion du Heredoc
+		cur->infile = ft_heredoc(t->next->value);
 		cur->heredoc = 1;
 	}
 	else
@@ -50,14 +50,12 @@ int	assign_redir(t_cmd *cur, t_token **tok)
 		set_infile(cur, t);
 	else
 	{
-		/* --- NOUVEAUTÉ : On crée le fichier physiquement --- */
 		if (t->type == REDIR_OUT)
 			fd = open(t->next->value, O_CREAT | O_WRONLY | O_TRUNC, 0644);
 		else
 			fd = open(t->next->value, O_CREAT | O_WRONLY | O_APPEND, 0644);
 		if (fd >= 0)
 			close(fd);
-		/* --------------------------------------------------- */
 		if (cur->outfile)
 			free(cur->outfile);
 		cur->outfile = ft_strdup(t->next->value);

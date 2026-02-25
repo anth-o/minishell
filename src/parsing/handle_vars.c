@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_vars.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antho <antho@student.42.fr>                +#+  +:+       +#+        */
+/*   By: adumaine <adumaine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/18 17:57:56 by antho             #+#    #+#             */
-/*   Updated: 2026/02/24 00:56:48 by antho            ###   ########.fr       */
+/*   Created: 2025/11/18 17:57:56 by adumaine          #+#    #+#             */
+/*   Updated: 2026/02/25 18:25:27 by adumaine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,6 @@ static void	handle_dollar(char **res, const char *input, int *i, t_shell *shell)
 	}
 }
 
-// st[0] = single_quote (sq) | st[1] = double_quote (dq)
 static void	process_char(char **res, const char *input, int *i, int *st)
 {
 	if (input[*i] == '\'' && !st[1])
@@ -101,16 +100,14 @@ char	*expand_variables(const char *input, t_shell *shell)
 
 void	expand_vars_tokens(t_token *head, t_shell *shell)
 {
-	t_token *tmp;
-	char *new_val;
+	t_token	*tmp;
+	char	*new_val;
 
 	tmp = head;
 	while (tmp)
 	{
-		/* On n'expand que les mots, pas les redirections brutes */
 		if (tmp->type == WORD)
 		{
-			/* On passe 'shell' qui contient .env et .exit_code */
 			new_val = expand_variables(tmp->value, shell);
 			free(tmp->value);
 			tmp->value = new_val;

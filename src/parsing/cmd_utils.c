@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: antho <antho@student.42.fr>                +#+  +:+       +#+        */
+/*   By: adumaine <adumaine@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/02/23 22:35:28 by antho             #+#    #+#             */
-/*   Updated: 2026/02/23 22:35:36 by antho            ###   ########.fr       */
+/*   Created: 2026/02/23 22:35:28 by adumaine          #+#    #+#             */
+/*   Updated: 2026/02/25 18:25:57 by adumaine         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void	free_cmds(t_cmd *cmds)
 		if (cmds->infile)
 		{
 			if (cmds->heredoc)
-				unlink(cmds->infile); // 🗑️ Nettoyage du fichier temp Heredoc !
+				unlink(cmds->infile);
 			free(cmds->infile);
 		}
 		if (cmds->outfile)
